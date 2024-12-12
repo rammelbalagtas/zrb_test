@@ -1,23 +1,19 @@
-CLASS zcl_test_bp_api_v2 DEFINITION
+CLASS zcl_api_bp_utility DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
 
   PUBLIC SECTION.
-    CLASS-METHODS: read IMPORTING out TYPE REF TO if_oo_adt_classrun_out,
-      readbykey IMPORTING out TYPE REF TO if_oo_adt_classrun_out,
-      update IMPORTING out TYPE REF TO if_oo_adt_classrun_out.
-
-
-    INTERFACES if_oo_adt_classrun .
+    CLASS-METHODS: read,
+      readbykey,
+      update.
   PROTECTED SECTION.
   PRIVATE SECTION.
 ENDCLASS.
 
 
 
-CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
-
+CLASS zcl_api_bp_utility IMPLEMENTATION.
   METHOD read.
     DATA: lt_bp            TYPE STANDARD TABLE OF zscm_businesspartner=>tys_a_address_email_address_ty,
           lo_client_proxy  TYPE REF TO /iwbep/if_cp_client_proxy,
@@ -33,7 +29,7 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
             client = DATA(lo_http_client)
         ).
         IF sy-subrc <> 0.
-          out->write( 'error create by http destination' ).
+*          out->write( 'error create by http destination' ).
           EXIT.
         ENDIF.
         lv_relative_service_root = '/sap/opu/odata/sap/API_BUSINESS_PARTNER/'.
@@ -53,14 +49,15 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
         lo_read_response->get_business_data( IMPORTING et_business_data = lt_bp ).
 
         LOOP AT lt_bp INTO DATA(ls_bp).
-          out->write( ls_bp ).
+*          out->write( ls_bp ).
         ENDLOOP.
       CATCH /iwbep/cx_cp_remote INTO DATA(lx_cp_remote).
         " Error handling
-        out->write( lx_cp_remote->get_longtext( ) ).
+*        out->write( lx_cp_remote->get_longtext( ) ).
+        DATA(lv_text) = lx_cp_remote->get_longtext( ).
       CATCH /iwbep/cx_gateway INTO DATA(lx_gateway).
         " Error Handling
-        out->write( lx_gateway->get_longtext( ) ).
+*        out->write( lx_gateway->get_longtext( ) ).
     ENDTRY.
   ENDMETHOD.
 
@@ -81,7 +78,7 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
             client = DATA(lo_http_client)
         ).
         IF sy-subrc <> 0.
-          out->write( 'error create by http destination' ).
+*          out->write( 'error create by http destination' ).
           EXIT.
         ENDIF.
         lv_relative_service_root = '/sap/opu/odata/sap/API_BUSINESS_PARTNER/'.
@@ -105,13 +102,13 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
         " Execute the request and retrieve the business data
         lo_response = lo_resource->create_request_for_read( )->execute( ).
         lo_response->get_business_data( IMPORTING es_business_data = ls_business_data ).
-        out->write( ls_business_data ).
+*        out->write( ls_business_data ).
       CATCH /iwbep/cx_cp_remote INTO DATA(lx_cp_remote).
         " Error handling
-        out->write( lx_cp_remote->get_longtext( ) ).
+*        out->write( lx_cp_remote->get_longtext( ) ).
       CATCH /iwbep/cx_gateway INTO DATA(lx_gateway).
         " Error Handling
-        out->write( lx_gateway->get_longtext( ) ).
+*        out->write( lx_gateway->get_longtext( ) ).
     ENDTRY.
   ENDMETHOD.
 
@@ -132,7 +129,7 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
             client = DATA(lo_http_client)
         ).
         IF sy-subrc <> 0.
-          out->write( 'error create by http destination' ).
+*          out->write( 'error create by http destination' ).
           EXIT.
         ENDIF.
         lv_relative_service_root = '/sap/opu/odata/sap/API_BUSINESS_PARTNER/'.
@@ -175,19 +172,12 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
 *        out->write( ls_business_data ).
       CATCH /iwbep/cx_cp_remote INTO DATA(lx_cp_remote).
         " Error handling
-        out->write( lx_cp_remote->get_longtext( ) ).
+*        out->write( lx_cp_remote->get_longtext( ) ).
       CATCH /iwbep/cx_gateway INTO DATA(lx_gateway).
         " Error Handling
-        out->write( lx_gateway->get_longtext( ) ).
+*        out->write( lx_gateway->get_longtext( ) ).
     ENDTRY.
 
 
-  ENDMETHOD.
-
-  METHOD if_oo_adt_classrun~main.
-    zcl_api_bp_utility=>read(  ).
-*    update( out = out ).
-*    read( out = out ).
-*    readbykey( out = out ).
   ENDMETHOD.
 ENDCLASS.
