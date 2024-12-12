@@ -27,6 +27,7 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
 
     TRY.
 
+
         cl_http_client=>create_internal(
           IMPORTING
             client = DATA(lo_http_client)
