@@ -14,7 +14,9 @@ ENDCLASS.
 
 
 
-CLASS zcl_api_bp_utility IMPLEMENTATION.
+CLASS ZCL_API_BP_UTILITY IMPLEMENTATION.
+
+
   METHOD read_local.
     DATA: lt_bp TYPE CL_API_BUSINESS_PARTNE_MPC=>TT_A_ADDRESSEMAILADDRESSTYPE,
           lo_client_proxy  TYPE REF TO /iwbep/if_cp_client_proxy,
@@ -24,7 +26,7 @@ CLASS zcl_api_bp_utility IMPLEMENTATION.
 
     TRY.
 
-        lo_client_proxy = /iwbep/cl_cp_client_proxy_fact=>create_v2_local_proxy( VALUE #( service_id = 'API_BUSINESSPARTNER' service_version = '0001' ) ).
+        lo_client_proxy = /iwbep/cl_cp_client_proxy_fact=>create_v2_local_proxy( VALUE #( service_id = 'API_BUSINESS_PARTNER' service_version = '0001' ) ).
 
         lo_read_request = lo_client_proxy->create_resource_for_entity_set( 'A_AddressEmailAddress' )->create_request_for_read( ).
         lo_read_request->set_top( iv_top = 10 ).
@@ -44,9 +46,12 @@ CLASS zcl_api_bp_utility IMPLEMENTATION.
     ENDTRY.
   ENDMETHOD.
 
+
   METHOD read_remote.
 
   ENDMETHOD.
+
+
   METHOD readbykey.
     DATA:
       ls_entity_key    TYPE zscm_businesspartner=>tys_a_address_email_address_ty,
@@ -97,6 +102,7 @@ CLASS zcl_api_bp_utility IMPLEMENTATION.
 *        out->write( lx_gateway->get_longtext( ) ).
     ENDTRY.
   ENDMETHOD.
+
 
   METHOD update.
     DATA:

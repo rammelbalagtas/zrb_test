@@ -28,7 +28,7 @@ CLASS ZCL_ENH_SD_CHECK_BEFORE_SAVE IMPLEMENTATION.
 *      append value #(  messagetype = 'E' messagetext = 'This document cannot be saved due to field YY1_FIELD_SDH.' ) to messages.
 *    endif.
     IF 1 = 1.
-*      zcl_api_bp_utility=>read_local(  ).
+      zcl_api_bp_utility=>read_local(  ).
     ENDIF.
   endmethod.
 ENDCLASS.
