@@ -44,11 +44,15 @@ CLASS zcl_test_product_api_v4 IMPLEMENTATION.
             client = DATA(lo_http_client)
         ).
 
+*        cl_http_client=>create_by_url( EXPORTING url = 'https://wdflbmt2261.wdf.sap.corp:50081'
+*                                       IMPORTING client = DATA(lo_http_client) ).
+
+"'https://wdflbmt2261.wdf.sap.corp/'
         IF sy-subrc <> 0.
           out->write( 'error create by http destination' ).
           EXIT.
         ENDIF.
-*
+
         lv_relative_service_root = '/sap/opu/odata4/sap/api_product/srvd_a2x/sap/product/0001/'.
         "oData v4 remote proxy
         lo_client_proxy = /iwbep/cl_cp_client_proxy_fact=>create_v4_remote_proxy(
@@ -57,6 +61,8 @@ CLASS zcl_test_product_api_v4 IMPLEMENTATION.
                                          proxy_model_id      = to_upper( 'ZTEST_PRODUCT_API_V4' )
                                          proxy_model_version = 0001 )
            iv_relative_service_root = lv_relative_service_root ).
+
+*      lo_client_proxy = /iwbep/cl_cp_client_proxy_fact=>create_v4_local_proxy( VALUE #( service_id = 'ZTEST_PRODUCT_API_V4' service_version = '0001' repository_id = 'DEFAULT' ) ).
 
 *        DATA base_url TYPE string.
 *        base_url = 'https://wdflbmt2261.wdf.sap.corp:50081/'.

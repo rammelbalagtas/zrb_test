@@ -135,7 +135,7 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
           out->write( 'error create by http destination' ).
           EXIT.
         ENDIF.
-        lv_relative_service_root = '/sap/opu/odata/sap/API_BUSINESS_PARTNER/'.
+        lv_relative_service_root = '/sap/opu/odata/sap/API_BANKACCOUNT_SRV/'.
         "oData v4 remote proxy
         lo_client_proxy = /iwbep/cl_cp_client_proxy_fact=>create_v2_remote_proxy(
            io_http_client = lo_http_client
@@ -185,9 +185,8 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD if_oo_adt_classrun~main.
-    zcl_api_bp_utility=>read(  ).
 *    update( out = out ).
-*    read( out = out ).
+    read( out = out ).
 *    readbykey( out = out ).
   ENDMETHOD.
 ENDCLASS.
