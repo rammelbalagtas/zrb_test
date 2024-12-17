@@ -186,7 +186,16 @@ CLASS zcl_test_bp_api_v2 IMPLEMENTATION.
 
   METHOD if_oo_adt_classrun~main.
 *    update( out = out ).
-    read( out = out ).
+*    read( out = out ).
 *    readbykey( out = out ).
+    zcl_api_bp_utility=>read_remote( ).
+
+    READ ENTITIES OF i_businesspartnertp_3 ENTITY businesspartner
+    ALL FIELDS WITH VALUE #( (
+                         businesspartner = '0000000001'
+                         ) ) RESULT DATA(partner).
+    IF 1 = 1.
+    ENDIF.
+
   ENDMETHOD.
 ENDCLASS.
