@@ -50,8 +50,7 @@ CLASS zcl_api_bp_utility IMPLEMENTATION.
 
   METHOD read_remote.
 
-   DATA: "lt_bp            TYPE STANDARD TABLE OF zscm_businesspartner=>tys_a_address_email_address_ty,
-         lt_bp            TYPE STANDARD TABLE OF zscm_businesspartner=>tys_a_business_partner_type,
+   DATA: lt_bp            TYPE STANDARD TABLE OF zscm_businesspartner=>tys_a_address_email_address_ty,
           lo_client_proxy  TYPE REF TO /iwbep/if_cp_client_proxy,
           lo_read_request  TYPE REF TO /iwbep/if_cp_request_read_list,
           lo_read_response TYPE REF TO /iwbep/if_cp_response_read_lst.
@@ -77,9 +76,7 @@ CLASS zcl_api_bp_utility IMPLEMENTATION.
                                          proxy_model_version = 0001 )
            iv_relative_service_root = lv_relative_service_root ).
 
-        lo_read_request = lo_client_proxy->create_resource_for_entity_set( 'A_BUSINESS_PARTNER' )->create_request_for_read( ).
-*        lo_read_request = lo_client_proxy->create_resource_for_entity_set( 'A_ADDRESS_EMAIL_ADDRESS' )->create_request_for_read( ).
-
+        lo_read_request = lo_client_proxy->create_resource_for_entity_set( 'A_ADDRESS_EMAIL_ADDRESS' )->create_request_for_read( ).
         lo_read_request->set_top( iv_top = 10 ).
         lo_read_response = lo_read_request->execute( ).
 
