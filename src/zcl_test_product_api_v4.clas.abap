@@ -105,23 +105,53 @@ CLASS zcl_test_product_api_v4 IMPLEMENTATION.
 
   METHOD read_local.
         DATA: lt_product     TYPE CL_API_PRODUCT_MPC=>TT_A_PRODUCTTYPE,
-            lo_client_proxy  TYPE REF TO /iwbep/if_cp_client_proxy,
-            lo_read_request  TYPE REF TO /iwbep/if_cp_request_read_list,
-            lo_read_response TYPE REF TO /iwbep/if_cp_response_read_lst.
+              lo_read_request  TYPE REF TO /iwbep/if_cp_request_read_list,
+              lo_read_response TYPE REF TO /iwbep/if_cp_response_read_lst.
+DATA: lo_client_proxy TYPE REF TO /iwbep/if_cp_client_proxy,
+      lo_batch_request    TYPE REF TO /iwbep/if_cp_request_batch.
+
+
+        DATA: lt_product2     TYPE CL_API_PRODUCT_MPC=>TT_A_PRODUCTTYPE,
+              lo_read_request2  TYPE REF TO /iwbep/if_cp_request_read_list,
+              lo_client_proxy2 TYPE REF TO /iwbep/if_cp_client_proxy,
+              lo_read_response2 TYPE REF TO /iwbep/if_cp_response_read_lst.
 
     TRY.
 
         lo_client_proxy = /iwbep/cl_cp_client_proxy_fact=>create_v4_local_proxy( VALUE #( service_id = 'API_PRODUCT' service_version = '0001' repository_id = 'SRVD_A2X' ) ).
-
         lo_read_request = lo_client_proxy->create_resource_for_entity_set( 'PRODUCT' )->create_request_for_read( ).
-        lo_read_request->set_top( iv_top = 5 ).
-        lo_read_response = lo_read_request->execute( ).
+        lo_read_request->set_top( iv_top = 100 ).
+
+*        lo_client_proxy2 = /iwbep/cl_cp_client_proxy_fact=>create_v4_local_proxy( VALUE #( service_id = 'API_PRODUCT' service_version = '0001' repository_id = 'SRVD_A2X' ) ).
+        lo_read_request2 = lo_client_proxy->create_resource_for_entity_set( 'PRODUCT' )->create_request_for_read( ).
+        lo_read_request2->set_top( iv_top = 100 ).
+
+        lo_batch_request = lo_client_proxy->create_request_for_batch( ).
+
+*        lo_read_response = lo_read_request->execute( ).
+        lo_batch_request->add_request( lo_read_request ).
+        lo_batch_request->add_request( lo_read_request2 ).
+
+        lo_batch_request->execute( ).
+
+*        lo_batch_request->check_execution( ).
+        lo_read_request->check_execution( ).
+        lo_read_request2->check_execution( ).
 
         "Retrieve the business data
-        lo_read_response->get_business_data( IMPORTING et_business_data = lt_product ).
+        lo_read_request->get_response(  )->get_business_data( IMPORTING et_business_data = lt_product ).
+        lo_read_request2->get_response(  )->get_business_data( IMPORTING et_business_data = lt_product2 ).
+*        lo_read_response->get_business_data( IMPORTING et_business_data = lt_product ).
+*        lo_read_response->get_business_data( IMPORTING et_business_data = lt_product2 ).
 
         LOOP AT lt_product INTO DATA(ls_product).
           out->write( ls_product ).
+        ENDLOOP.
+
+        out->write( ls_product ).
+
+        LOOP AT lt_product2 INTO DATA(ls_product2).
+          out->write( ls_product2 ).
         ENDLOOP.
 
       CATCH /iwbep/cx_cp_remote INTO DATA(lx_cp_remote).
